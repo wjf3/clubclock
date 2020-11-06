@@ -1,1 +1,1 @@
-When running locally, you might want to use 'npx http-server -c-1' to make sure everything loads properly.
+When running locally, you might want to use 'npx http-server -c-1' to get things to load properly (otherwise you get cross origin bugs).
