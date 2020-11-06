@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "MonumentGrotesk-Regular";
+  src: url("./assets/monument-grotesk/MonumentGrotesk-Regular.woff2") format("woff2"),
+       url("./assets/monument-grotesk/MonumentGrotesk-Regular") format("woff");
+}
+
+:root {
+  --dark: #000;
+  --light: #E0E1D8; 
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+	text-align: center;
+	font-family: "MonumentGrotesk-Regular", Helvetica, Arial;
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	line-height: 1.35em;
+}
+
+h1 {
+	text-align: center;
+	font-weight: 400;
+	font-size: 32px;
+	line-height: 1.2em;
+}
+
+a {
+	color: var(--dark);
+	text-decoration: none;
+}
+
+.light-bg {
+	background-color: var(--light);
+	color: var(--dark);
+	background-image: url("./assets/color-bg.png");
+}
+
+.dark-bg {
+	background: var(--dark); 
+	color: var(--light);
+}
+
+#app {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column
+}
+
+.content {
+	flex: 1;
+}
+
+#phone-canvas {
+	background-image: url("./assets/phone-firstframe.png");
+	background-size: contain;
+}
+
+.content-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.dark-block {
+	flex: 1;
+	padding-bottom: 120px;
+}
+
+.header {
+	padding-top: 22px;
+}
+
+.header > * {
+	vertical-align: middle;
+	line-height: 20px;
+}
+
+.ampersand {
+	opacity: .3;
+	padding: 4px;
+	line-height: 24px;
+	vertical-align: bottom;
+}
+
+.header a:hover span {
+	text-decoration: underline;
+}
+
+a object {
+	pointer-events: none;
+}
+
+.footer {
+	display: flex;
+	padding: 40px;
+}
+
+.footer .left {
+	text-align: left;
+	flex: 1;
+}
+
+.footer .right {
+	text-align: right;
+}
+
+
+.footer a.inactive {
+	opacity: 50%;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+#merch, #hero {
+	padding: 72px 0 0 0;
+}
+
+#merch p, #hero p {
+	max-width: 375px;
+	margin: 20px auto;
+}
+
+.button {
+	display: inline-block;
+	padding: 6px 10px;	
+	border-radius: 6px;
+}
+
+.button:hover {
+	opacity: 70%;
+	text-decoration: none;
+}
+
+.button:hover > * {
+	text-decoration: none;
+}
+
+.button > *, .img-link > * {
+	vertical-align: middle;
+	line-height: 24px;
+}
+
+.button object {
+	padding-right: 2px;
+	margin-top: -1px;
+}
+
+
+@media only screen and (max-width: 600px) {
+	h1 {
+		font-size: 21px;
+	}
+
+	p {
+		padding: 0 40px;
+	}
+	.footer {padding: 40px 20px;
+	}
+	.full-text {display: none}
+  }
+}

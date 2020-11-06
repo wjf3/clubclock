@@ -1,0 +1,218 @@
+<!--
+      o        +
+     ^^^      ^^^
+     ( )      ( ) 
+     ) (      ) (      |||       ^       _/)
+    (   )    (   )     | |      / \     /. |=
+     ) (      ) (      ) (      ) (    /_) |=     ( )
+     ) (      ) (      ) (      ) (   (/ ) (=     ) (
+    (   )    (   )    (   )    (   )    (   )    (   )
+   [_____]  [_____]  [_____]  [_____]  [_____]  [_____]
+
+ -->
+
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Club Clock by No Moderation & World Chess</title>
+	<script src="./translator.min.js"></script>
+	<link rel="stylesheet" href="style.css">
+	<meta property="og:title" content="Club Clock by No Moderation & World Chess"/>
+    <meta property="og:url" content=""/>
+    <meta property="og:description" content="the first chess clock designed from the ground up for the modern game"/>
+    <meta property="og:image" content="https://iansilber.com/nomod-clubclock/assets/phone-firstframe.png"/>
+    <meta property="og:image:width" content="1920"/>
+    <meta property="og:image:height" content="1080"/>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Club Clock">
+    <meta name="twitter:description" content="the first chess clock designed from the ground up for the modern game">
+</head>
+
+<body class="light-bg">
+
+	<div id="app">
+
+		<div class="header">
+			<a href="https://worldchess.com" class="img-link">
+				<object type="image/svg+xml" data="./assets/world-chess.svg" width="20" height="20"></object> 
+				<span>world chess</span>
+			</a>
+
+			<span class="ampersand">&</span>
+
+			<a href="http://nomoderation.com" class="img-link">
+				<object type="image/svg+xml" data="./assets/no-mod.svg" width="20" height="20"></object> 
+				<span>no moderation</span>
+			</a>
+
+ 		</div>
+		
+		<div class="content dark-bg">
+			<div class="content-container light-bg">
+				<div id="hero">
+					<div>
+						<h1 data-i18n="title">a new era demands a new clock</h1>
+						<p data-i18n="meet_club_clock">Meet the Club Clock — the first chess clock designed from the ground up for the modern game. Part of a special partnership between World Chess and No Moderation.</p>
+						<p><a href="#" class="button dark-bg">
+								<object type="image/svg+xml" data="./assets/apple.svg" width="12" height="14"></object> 
+								<span data-i18n="download">download on the app store</span>
+						</a></p>
+
+						<canvas id="phone-canvas" width="1" height="1"></canvas>
+  						<video width="1" loop autoplay muted playsinline id="phone-video" src="./assets/phone.mp4" controls="true"></video>
+
+					</div>
+				</div>
+
+				<div class="dark-bg">
+
+					<div id="merch">
+						<h1 data-i18n="merch_header">for a limited time</h1>
+						<p data-i18n="merch_body">To celebrate the release of the Club Clock we’re releasing  a limited edition 14 ounce heavy fleece pullover sweatshirt.</p>
+						<p><a href="#" class="button light-bg" data-i18n="merch_button">buy sweatshirt for $75</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="footer dark-bg">
+			<div class="left">
+				<a href="http://instagram.com/theworldchess">@theworldchess</a>&nbsp;&nbsp;
+				<a href="http://instagram.com/no_moderation">@no_moderation</a>
+			</div>
+			<div class="right languages">
+				<a href="#" id="en">en<span class="full-text">glish</span></a>&nbsp;&nbsp;
+				<a href="#" id="ru">ru<span class="full-text">ssian</span></a>
+			</div>
+		</div>
+		
+	</div>
+	
+
+	<script>
+
+		var translator = new Translator();
+
+		// Auto-generate en translations
+		var en = {};
+		strings = document.querySelectorAll("[data-i18n]");
+		for (i = 0; i < strings.length; i++) {
+			en[strings[i].getAttribute("data-i18n")] = strings[i].innerHTML;
+		}
+
+  		var translator = new Translator({
+  			filesLocation: './i18n',
+  			debug: true
+		});
+
+		translator.add('en', en);
+
+		translator.fetch(['ru']).then(() => {
+  			translator.translatePageTo();
+		});
+
+		switchLanguage = function(lang) {
+			translator.translatePageTo(lang);
+			langs = document.querySelectorAll(".languages a")
+			for (lang of langs) {
+				lang.classList.toggle("inactive");
+			}
+		}
+
+		switchLanguage('en');
+		document.getElementById("en").classList.remove("inactive");
+
+		languageLinks = document.querySelectorAll(".languages a");
+		for (const link of languageLinks) {
+
+			link.addEventListener('click', event => {
+				switchLanguage(link.getAttribute("id"));
+			});
+		}
+
+		let canvas = document.querySelector("#phone-canvas");
+		let context = canvas.getContext("2d");
+
+		function sizeCanvas() {
+			vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+			aspect_ratio = 9/16;
+			size = (vw > 375) ? .75 : 1;
+
+			canvas.width = vw * size * devicePixelRatio;
+			canvas.height = canvas.width * aspect_ratio;
+
+			context.scale(devicePixelRatio, devicePixelRatio);
+
+			// scale everything down using CSS
+			canvas.style.width = vw * size + 'px';
+			canvas.style.height = canvas.style.width * aspect_ratio + 'px';	
+
+		}
+
+		sizeCanvas();
+
+	  	let vid = document.getElementById('phone-video');
+		var vidWidth;
+		var vidHeight;
+		var devicePixelRatio = window.devicePixelRatio;
+		let rect = canvas.getBoundingClientRect();
+
+		window.onresize = sizeCanvas;
+
+		vid.onplay = function() {
+			vidWidth = vid.videoWidth;
+			vidHeight = vid.videoHeight;
+			
+			drawingLoop();
+			setTimeout(function() {
+				setVideoBgColor(vid, null);	
+			}, 150);
+			
+		}
+
+		function drawingLoop() {
+			
+			requestId = window.requestAnimationFrame(drawingLoop)
+			context.drawImage(vid, 0, 0, vidWidth, vidHeight, // source rectangle
+		                   0, 0, canvas.width / devicePixelRatio, canvas.height / devicePixelRatio); // destination rectangle);
+		}
+
+		function setVideoBgColor(vid, backgroundElement) {			
+            // draw first four pixel of video to a canvas
+            // then get pixel color from that canvas
+            var canvas = document.createElement("canvas");
+            canvas.width = 8;
+            canvas.height = 8;
+
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(vid, 0, 0, 8, 8);
+
+            var p = ctx.getImageData(0, 0, 8, 8).data;
+            //dont take the first but fourth pixel [r g b]
+            els = document.querySelectorAll("body, .content-container");
+            for (el of els) {
+            	el.style.backgroundColor = "rgb(" + p[60] + "," + p[61] + "," + p[62] + ")";;
+            }
+            // backgroundElement.style.backgroundColor = "rgb(" + p[60] + "," + p[61] + "," + p[62] + ")";
+		}
+
+		function handleVisibilityChange() {
+		  setTimeout(function() {
+		  	vid.play();
+		  }, 500);
+		  
+		}
+
+		document.getElementById("phone-canvas").onclick = function() {
+			vid.play();
+		}
+
+		document.addEventListener("visibilitychange", handleVisibilityChange, false);
+
+	</script>
+
+	
+</body>
+</html>
